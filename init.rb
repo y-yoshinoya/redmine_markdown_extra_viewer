@@ -7,7 +7,7 @@ RepositoriesController.class_eval do
     markdown_extra_viewer_orig_entry
     if not performed? and @path =~ /\.(md|markdown)\z/
       @content = BlueFeather.parse @content
-      render :action => "entry_markdown"
+      render :template => "repositories/entry_markdown"
     end
   end
 end
