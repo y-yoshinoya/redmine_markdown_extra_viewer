@@ -9,7 +9,7 @@
 <p><%= render :partial => 'link_to_functions' %></p>
 
 <div class="wiki">
-<%= @content %>
+<%= @content.html_safe %>
 </div>
 
 <% content_for :header_tags do %>
