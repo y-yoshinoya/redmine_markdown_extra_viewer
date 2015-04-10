@@ -1,12 +1,25 @@
 require 'redmine'
-require 'bluefeather'
+require 'redcarpet'
 
 RepositoriesController.class_eval do
   alias markdown_extra_viewer_orig_entry entry
   def entry
     markdown_extra_viewer_orig_entry
     if not performed? and @path =~ /\.(md|markdown)\z/
-      @content = BlueFeather.parse @content
+      markdown = Redcarpet::Markdown.new(
+        Redmine::WikiFormatting::Markdown::HTML.new(
+          :filter_html => true,
+          :hard_wrap => true
+        ),
+        :autolink => true,
+        :fenced_code_blocks => true,
+        :space_after_headers => true,
+        :tables => true,
+        :strikethrough => true,
+        :superscript => true,
+        :no_intra_emphasis => true
+      )
+      @content = markdown.render(@content)
       render :template => "repositories/entry_markdown"
     end
   end
@@ -20,3 +33,5 @@ Redmine::Plugin.register :redmine_markdown_extra_viewer do
   url 'http://github.com/tmtm/redmine_markdown_extra_viewer'
   author_url 'http://github.com/tmtm'
 end
+
+
