@@ -9,7 +9,7 @@
 <p><%= render :partial => 'link_to_functions' %></p>
 
 <div class="wiki">
-<%= @content.html_safe %>
+<%= @content.html_safe.force_encoding('utf-8') %>
 </div>
 
 <% content_for :header_tags do %>

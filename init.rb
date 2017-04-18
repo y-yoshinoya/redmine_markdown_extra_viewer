@@ -2,12 +2,18 @@ require 'redmine'
 require 'redcarpet'
 
 RepositoriesController.class_eval do
+  class CodeRayHTML < Redcarpet::Render::HTML
+    def block_code(code, language)
+      CodeRay.scan(code.force_encoding('utf-8'), language || 'md').div
+    end
+  end
+
   alias markdown_extra_viewer_orig_entry entry
   def entry
     markdown_extra_viewer_orig_entry
     if not performed? and @path =~ /\.(md|markdown)\z/
       markdown = Redcarpet::Markdown.new(
-        Redmine::WikiFormatting::Markdown::HTML.new(
+        CodeRayHTML.new(
           :filter_html => true,
           :hard_wrap => true
         ),
